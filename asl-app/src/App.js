@@ -1,28 +1,44 @@
 import React, { useState, useEffect } from "react";
 import VideoPlayer from "./VideoPlayer";
+import AudioRecorder from "./AudioRecorder";
 import "./App.css"; // Import the CSS file
 
 function App() {
   const [videoId, setVideoId] = useState(null);
 
-  useEffect(() => {
-    const fetchVideoPaths = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:5000/paths");
-        const data = await response.json();
-        console.log(data); // Log the data to see it
+  // useEffect(() => {
+  //   const fetchVideoPaths = async () => {
+  //     try {
+  //       const response = await fetch("http://127.0.0.1:5000/paths");
+  //       const data = await response.json();
+  //       console.log(data); // Log the data to see it
 
-        // Set the first video path as the default videoId
-        if (data.video_paths && data.video_paths.length > 0) {
-          setVideoId(data.video_paths[0]); // Set the video ID to the first path
-        }
-      } catch (error) {
-        console.error("Error fetching video paths:", error);
+  //       // Set the first video path as the default videoId
+  //       if (data.video_paths && data.video_paths.length > 0) {
+  //         setVideoId(data.video_paths[0]); // Set the video ID to the first path
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching video paths:", error);
+  //     }
+  //   };
+
+  //   fetchVideoPaths(); // Call the function on component mount
+  // }, []); // Empty dependency array ensures it runs once when the component mounts
+
+  const fetchVideoPaths = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/paths");
+      const data = await response.json();
+      console.log(data); // Log the data to see it
+
+      // Set the first video path as the default videoId
+      if (data.video_paths && data.video_paths.length > 0) {
+        setVideoId(data.video_paths[0]); // Set the video ID to the first path
       }
-    };
-
-    fetchVideoPaths(); // Call the function on component mount
-  }, []); // Empty dependency array ensures it runs once when the component mounts
+    } catch (error) {
+      console.error("Error fetching video paths:", error);
+    }
+  };
 
   useEffect(() => {
     // Log videoId after it has been updated
@@ -37,7 +53,13 @@ function App() {
         <h1>Welcome to the Video Library</h1>
       </header>
       <main className="app-main">
+        <AudioRecorder />
         {videoId ? <VideoPlayer videoId={videoId} /> : <p>Loading video...</p>}
+        <div>
+          <button onClick={fetchVideoPaths} className="send-button">
+            Get ASL
+          </button>
+        </div>
       </main>
       <footer className="app-footer">
         <p>Enjoy your viewing experience!</p>

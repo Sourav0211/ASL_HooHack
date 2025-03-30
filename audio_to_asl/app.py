@@ -17,19 +17,49 @@ os.makedirs("audio_to_text", exist_ok=True)
 os.makedirs("text_to_sign", exist_ok=True)
 os.makedirs("final_path", exist_ok=True)
 
+
+def convert_audio_to_wav(audio_path):
+    """Convert any audio format to WAV."""
+    try:
+        # Using pydub to load the audio file and export it as WAV
+        audio = AudioSegment.from_file(audio_path)
+        wav_path = audio_path.replace(audio_path.split('.')[-1], 'wav')
+        audio.export(wav_path, format="wav")
+        return wav_path
+    except Exception as e:
+        raise ValueError(f"Error converting audio to WAV: {e}")
+
 @app.route("/convert", methods=["POST"])
 def convert():
     if "audio" not in request.files:
         return jsonify({"error": "No audio file provided"}), 400
 
     audio_file = request.files["audio"]
-    audio_path = "mic_to_audio/temp_audio.wav"
+    audio_path = "mic_to_audio/react_temp_audio.wav"
+    # audio_path = "mic_to_audio/temp_audio.wav"
     audio_file.save(audio_path)
 
     print(f"✅ Audio file saved at: {audio_path}")
 
-    # Step 1: Convert speech to text
+    # Convert the audio to WAV if it's not already in that format
+    if not audio_path.endswith('.wav'):
+        try:
+            audio_path = convert_audio_to_wav(audio_path)
+            print(f"✅ Audio converted to WAV: {audio_path}")
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+
+    
+
+    # # Step 1: Convert speech to text
     text = speech_to_text(audio_path)
+
+
+
+
+
+
     # Save the transcribed text in a file
     text_filename = f"audio_to_text/transcription.txt"
     with open(text_filename, "w") as f:
