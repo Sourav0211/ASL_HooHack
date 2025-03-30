@@ -3,8 +3,19 @@ import requests
 import pyaudio
 import wave
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app1 = FastAPI()
+# Allow all origins (or specify your React app's URL if you want to restrict it)
+app1.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins, you can replace "*" with "http://localhost:3000" for stricter CORS policy
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
+
+
 
 # Create directories if they don't exist
 os.makedirs("mic_to_audio", exist_ok=True)

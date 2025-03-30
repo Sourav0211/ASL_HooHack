@@ -1,2 +1,26 @@
 /audio_to_asl/env
 /audio_to_asl/tokenize
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+asl-app/node_modules
+asl-app/.pnp
+asl-app/.pnp.js
+
+# testing
+asl-app/coverage
+
+# production
+asl-app/build
+
+# misc
+asl-app/.DS_Store
+asl-app/.env.local
+asl-app/.env.development.local
+asl-app/.env.test.local
+asl-app/.env.production.local
+
+asl-app/npm-debug.log*
+asl-app/yarn-debug.log*
+asl-app/yarn-error.log*
